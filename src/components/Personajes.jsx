@@ -1,10 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {useDispatch, useSelector} from 'react-redux'
 import { obtenerPersonajesAccion, siguientePersonajes } from '../redux/apiDucks';
 import {PersonajesCard} from './PersonajesCard';
+import { Search } from './Search';
 
 export const Personajes = () => {    
 
+    const [loading, setloading] = useState(true);
+    
     const dispatch = useDispatch();
 
     const personajes = useSelector(store => store.Personajes.array);        
@@ -13,26 +16,50 @@ export const Personajes = () => {
         dispatch(siguientePersonajes());
     };
 
-    useEffect(() => {
-        dispatch(obtenerPersonajesAccion());          
-    }, [dispatch])
+    useEffect(() => {        
+        
+        dispatch(obtenerPersonajesAccion()); 
+        setloading(false);
+
+    }, [dispatch]);
+
+    
 
     return (
-        <div className='container'>
-            <h3> Listado de Personajes  </h3>           
-            {
-                personajes.map( item => (
-                    <PersonajesCard 
-                        key={ item.name }
-                        { ...item }
-                    />
-                ))                    
-            }            
-            <button 
-                className='btn btn-primary'
-                onClick={handleNext}> Siguiente               
-            </button>
+        <>
+            <div>
+                <Search/>
+                <hr />
+            </div>
+           
+            {loading &&
+                <div className="spinner-border" role="status">
+                    <span className="sr-only">Loading...</span>
+               </div>            
+            }
 
-        </div>
+            
+            <div className='card-columns'>                  
+                
+                {
+                    personajes.map( item => (
+                        <PersonajesCard 
+                            key={ item.name }
+                            { ...item }
+                        />
+                    ))                    
+                }   
+
+            </div>
+
+            
+            <div>
+                <hr />
+                <button 
+                    className='btn btn-primary'
+                    onClick={handleNext}> Siguiente               
+                </button>
+            </div>
+        </>
     )
 }

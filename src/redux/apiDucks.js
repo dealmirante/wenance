@@ -10,6 +10,7 @@ const InitialState = {
 const OBTENER_PERSONAJES = 'OBTENER_PERSONAJES';
 const SIGUIENTE_PERSONAJES = 'SIGUIENTE_PERSONAJES';
 const BORRAR_PERSONAJES = 'BORRAR_PERSONAJES';
+const BUSCAR_PERSONAJES = 'BUSCAR_PERSONAJES';
 
 // reducer
 export default function apiReducer(state = InitialState, action) {
@@ -33,6 +34,12 @@ export default function apiReducer(state = InitialState, action) {
                 ...state,                  
                 array: action.payload.array
                 
+            }
+        case BUSCAR_PERSONAJES:
+            
+            return {
+                ...state,
+                array: action.payload.array
             }
             
         
@@ -92,6 +99,36 @@ export const borrarPersonaje = (name) => async(dispatch, getState) => {
             
         dispatch({
             type: BORRAR_PERSONAJES,
+            payload: {
+               array: array2               
+            }
+        })
+        
+    } catch (error) {
+        console.log(error)
+        
+    }
+
+}
+
+export const buscarPersonaje = (name) => async(dispatch, getState) => {
+
+    
+    //console.log('name parametro', name);
+    const array1 = getState().Personajes.array;    
+    //console.log('array1', array1);
+    //console.log('apiDucks',name);
+    //const array2= array1.filter (item => item.name.toLowerCase() === name.toLowerCase()); 
+
+    const array2 = array1.filter(element => element.name.toLowerCase().includes(name));
+    
+
+    //console.log('array2', array2);
+
+    try {
+            
+        dispatch({
+            type: BUSCAR_PERSONAJES,
             payload: {
                array: array2               
             }

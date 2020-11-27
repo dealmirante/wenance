@@ -6,12 +6,11 @@ import generarStore from './redux/store';
 
 import './index.css';
 
-
 function App() {
 
   
   return (
-    <Provider store = {generarStore()}>
+    <Provider store = {generarStore()}>      
       <Personajes/>
     </Provider>
   );
